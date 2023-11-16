@@ -77,6 +77,7 @@ let player;
  * @typedef {{
  * pos: Vector
  * type: string
+ * speed: number
  * }} Enemy
  */
 
@@ -116,56 +117,87 @@ function update() {
   speedUp();
   console.log(enemies);
   if (enemies.length === 0) {
+    let direction = Math.random() > 0.5 ? 1 : -1;
+    const speed = (enemySpeed *= direction);
+    const yPos = speed > 0 ? 0 : G.HEIGHT;
     console.log("I ADD");
     for (let i = 0; i < 7; i++) {
-      const piece = Math.random() * 3 + 1;
+      const piece = Math.random() * 4 + 1;
 
       switch (Math.floor(piece)) {
         case 1:
           enemies.push(
             {
-              pos: vec(0, 0),
+              pos: vec(0, yPos),
               type: "gap",
+              speed: speed,
             },
             {
-              pos: vec(0, 0),
+              pos: vec(0, yPos),
               type: "up",
+              speed: speed,
             },
             {
-              pos: vec(0, 0),
+              pos: vec(0, yPos),
               type: "gap",
+              speed: speed,
             }
           );
           break;
         case 2:
           enemies.push(
             {
-              pos: vec(0, 0),
+              pos: vec(0, yPos),
               type: "kill",
+              speed: speed,
             },
             {
-              pos: vec(0, 0),
+              pos: vec(0, yPos),
               type: "kill",
+              speed: speed,
             },
             {
-              pos: vec(0, 0),
+              pos: vec(0, yPos),
               type: "kill",
+              speed: speed,
             }
           );
           break;
         case 3:
           enemies.push(
             {
-              pos: vec(0, 0),
+              pos: vec(0, yPos),
               type: "kill",
+              speed: speed,
             },
             {
-              pos: vec(0, 0),
+              pos: vec(0, yPos),
               type: "down",
+              speed: speed,
             },
             {
-              pos: vec(0, 0),
+              pos: vec(0, yPos),
               type: "kill",
+              speed: speed,
+            }
+          );
+          break;
+        case 4:
+          enemies.push(
+            {
+              pos: vec(0, yPos),
+              type: "gap",
+              speed: speed,
+            },
+            {
+              pos: vec(0, yPos),
+              type: "down",
+              speed: speed,
+            },
+            {
+              pos: vec(0, yPos),
+              type: "gap",
+              speed: speed,
             }
           );
           break;
@@ -207,7 +239,7 @@ function update() {
 
   remove(enemies, (e, index) => {
     e.pos.x = index * 6 + 4;
-    e.pos.y += enemySpeed;
+    e.pos.y += e.speed;
     let sprite;
     switch (e.type) {
       case "kill":
@@ -233,6 +265,7 @@ function update() {
           enemies[index] = {
             pos: vec(0, 0),
             type: "gap",
+            speed: e.speed,
           };
           break;
         case "d":
@@ -240,6 +273,7 @@ function update() {
           enemies[index] = {
             pos: vec(0, 0),
             type: "gap",
+            speed: e.speed,
           };
           break;
         case "b":
@@ -252,7 +286,7 @@ function update() {
       }
     }
 
-    return e.pos.y > G.HEIGHT;
+    return e.pos.y > G.HEIGHT || e.pos.y < 0;
   });
 }
 
