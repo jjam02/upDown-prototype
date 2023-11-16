@@ -95,7 +95,7 @@ let playerSpeed;
 let enemySpeed;
 let isMoving;
 
-let row = [37, 57, 77, 97, 117, 137];
+let row = [37, 57, 77, 97, 117];
 
 function update() {
   if (!ticks) {
@@ -115,14 +115,14 @@ function update() {
   addScore(1 / 60);
 
   speedUp();
-  console.log(enemies);
+
   if (enemies.length === 0) {
     let direction = Math.random() > 0.5 ? 1 : -1;
     const speed = (enemySpeed *= direction);
     const yPos = speed > 0 ? 0 : G.HEIGHT;
-    console.log("I ADD");
+
     for (let i = 0; i < 7; i++) {
-      const piece = Math.random() * 4 + 1;
+      const piece = Math.random() * 5 + 1;
 
       switch (Math.floor(piece)) {
         case 1:
@@ -201,6 +201,25 @@ function update() {
             }
           );
           break;
+        case 5:
+          enemies.push(
+            {
+              pos: vec(0, yPos),
+              type: "kill",
+              speed: speed,
+            },
+            {
+              pos: vec(0, yPos),
+              type: "up",
+              speed: speed,
+            },
+            {
+              pos: vec(0, yPos),
+              type: "kill",
+              speed: speed,
+            }
+          );
+          break;
       }
     }
   }
@@ -258,7 +277,6 @@ function update() {
     const collider = char(sprite, e.pos).isColliding.char.a;
 
     if (collider) {
-      console.log("collided");
       switch (sprite) {
         case "c":
           movePlayerUp();
@@ -291,12 +309,10 @@ function update() {
 }
 
 function drawFloor() {
-  for (let i = 40; i < G.HEIGHT; i += 20) {
+  for (let i = 40; i < G.HEIGHT - 20; i += 20) {
     color("light_purple");
     rect(0, i, G.WIDTH, 5);
-    color("black");
   }
-  rect(0, 140, G.WIDTH);
 }
 
 function movePlayerUp() {
