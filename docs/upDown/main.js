@@ -197,10 +197,16 @@ function update() {
 
   color("black");
   player.pos.y = row[player.row];
-  char("a", player.pos);
+  if (playerSpeed > 0) {
+    char("a", player.pos);
+  } else {
+    char("a", player.pos, {
+      mirror: { x: -1 },
+    });
+  }
 
   remove(enemies, (e, index) => {
-    e.pos.x = index * 6 + 2;
+    e.pos.x = index * 6 + 4;
     e.pos.y += enemySpeed;
     let sprite;
     switch (e.type) {
@@ -224,9 +230,17 @@ function update() {
       switch (sprite) {
         case "c":
           movePlayerUp();
+          enemies[index] = {
+            pos: vec(0, 0),
+            type: "gap",
+          };
           break;
         case "d":
           movePlayerDown();
+          enemies[index] = {
+            pos: vec(0, 0),
+            type: "gap",
+          };
           break;
         case "b":
           end();
