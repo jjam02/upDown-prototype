@@ -1,4 +1,4 @@
-title = "up down";
+title = "up down funk";
 
 description = `
 hold to stop
